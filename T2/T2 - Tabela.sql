@@ -124,7 +124,7 @@ João Souza tenha trabalhado em junho de 97*/
 SELECT nome_eng FROM engenheiro eng, obra ob, obra_operario obop, operario op
  WHERE eng.crea = ob.cod_eng_resp
  AND ob.cod_obra = obop.cod_obra
- AND obop.data BETWEEN '01/06/1997' AND '30/06/1997' --LIKE '%06/1997' IMPOSSIVEL COMPARAR DATA COM STRING
+ AND obop.data BETWEEN '01/06/1997' AND '30/06/1997' --IMPOSSIVEL COMPARAR DATA COM STRING. Mais performance
  AND obop.cart_trab = op.cart_trab
  AND op.nomeop = 'Joao Souza'
 
@@ -141,11 +141,73 @@ SELECT nomeop FROM operario op, obra_operario obop, obra ob, engenheiro eng
  WHERE op.cart_trab = obop.cart_trab
  AND obop.cod_obra = ob.cod_obra
  AND ob.cod_eng_resp = eng.crea
- AND eng.area_atuacao = 'Pontes/Viadutos' --trabalhado com todos os engenheiros(2)
+ AND eng.area_atuacao = 'Pontes/Viadutos'
+--juntar as duas querys
+ SELECT COUNT(*) FROM engenheiro WHERE area_atuacao = 'Pontes/Viadutos'
 
-/*
+
 NOMEOP
 ------------------------------
 Paulo Castro
-*/
+/*3) Para cada operário que trabalha para mais de uma construtora,
+recuperar o seu nome e os nomes das construtoras.*/
+SELECT nomeop, nome_const FROM operario op, construtora cons, operario_construtora opcons
+WHERE op.cart_trab = opcons.cart_trab
+AND cons.cod_const = opcons.cod_const
+--mostrar acima de 2
+ORDER BY nomeop DESC --excluir linha
+
+NOMEOP NOME_CONST
+----------------------------- ------------------------------
+Paulo Castro A3
+Paulo Castro Metaplan
+Joao Souza Encol
+Joao Souza Metaplan
+/*4) Recuperar os nomes dos operários que trabalham em somente uma construtora.*/
+SELECT nomeop FROM operario op, construtora cons, operario_construtora opcons
+WHERE op.cart_trab = opcons.cart_trab
+AND cons.cod_const = opcons.cod_const
+--que trabalham só em uma construtora
+
+NOMEOP
+------------------------------
+Luis Padilha
+/*5) Recuperar os nomes dos engenheiros que atuam em alguma construtora além da Encol.*/
+
+
+
+NOME_ENG
+------------------------------
+Luis Silva
+/*6) Para cada construtora, recuperar o nome da construtora e o
+número de engenheiros da área de Edificação.*/
+
+
+
+NOME_CONST Qtde de Engenheiros
+------------------------------ ---------------------------
+A3 1
+Encol 1
+Goldzstein 1
+/*7) Para cada operário da construtora Encol, recuperar o seu numero
+de carteira de trabalho, nome e o numero de obras (mesmo não sendo da
+construtora Encol) nas quais trabalhou no primeiro semestre de 97.*/
+
+
+
+
+CART_TRAB NOMEOP Qtde de Obras
+--------------- ------------------------------ -----------------------
+op030 Joao Souza 1
+
+
+
+
+
+
+
+
+
+
+
 
