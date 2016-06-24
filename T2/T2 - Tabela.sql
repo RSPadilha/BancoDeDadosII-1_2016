@@ -154,6 +154,10 @@ recuperar o seu nome e os nomes das construtoras.*/
 SELECT nomeop, nome_const FROM operario op, construtora cons, operario_construtora opcons
 WHERE op.cart_trab = opcons.cart_trab
 AND cons.cod_const = opcons.cod_const
+GROUP BY nomeop
+
+HAVING COUNT(cons.cod_const) > 1
+GROUP BY nome_const
 --mostrar acima de 2
 ORDER BY nomeop DESC --excluir linha
 
@@ -167,7 +171,8 @@ Joao Souza Metaplan
 SELECT nomeop FROM operario op, construtora cons, operario_construtora opcons
 WHERE op.cart_trab = opcons.cart_trab
 AND cons.cod_const = opcons.cod_const
---que trabalham só em uma construtora
+GROUP BY nomeop
+HAVING COUNT(cons.cod_const) < 2
 
 NOMEOP
 ------------------------------
