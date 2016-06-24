@@ -38,6 +38,7 @@ foreign key (nnf, dtvenda) references Xvenda,
 foreign key (codproduto) references Xproduto);
 
 --INSERINDO DADOS
+--SET datestyle TO SQL, DMY; --Caso não insira a data
 insert into Xproduto values (1, 'Coca Cola', 'lt', 1.20);
 insert into Xproduto values (2, 'Presunto Sadia', 'kg', 5.40);
 insert into Xproduto values (3, 'Sabonete Palmolive', 'un', 0.65);
