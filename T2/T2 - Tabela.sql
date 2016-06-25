@@ -127,7 +127,7 @@ SELECT nome_eng FROM engenheiro eng, obra ob, obra_operario obop, operario op
  AND obop.data BETWEEN '01/06/1997' AND '30/06/1997' --IMPOSSIVEL COMPARAR DATA COM STRING. Mais performance
  AND obop.cart_trab = op.cart_trab
  AND op.nomeop = 'Joao Souza'
-
+--Outra solucao
 SELECT nome_eng FROM engenheiro eng, obra ob, obra_operario obop, operario op
  WHERE eng.crea = ob.cod_eng_resp
  AND ob.cod_obra = obop.cod_obra
@@ -142,24 +142,30 @@ SELECT nomeop FROM operario op, obra_operario obop, obra ob, engenheiro eng
  AND obop.cod_obra = ob.cod_obra
  AND ob.cod_eng_resp = eng.crea
  AND eng.area_atuacao = 'Pontes/Viadutos'
---juntar as duas querys
- SELECT COUNT(*) FROM engenheiro WHERE area_atuacao = 'Pontes/Viadutos'
-
+ group by nomeop
+--selecionar somente os que trabalharam com TODOS(2) engenheiros de P/V
+	--HAVING COUNT(area_atuacao) FROM engenheiro WHERE area_atuacao = 'Pontes/Viadutos')
+	--SELECT COUNT(*) FROM engenheiro WHERE area_atuacao = 'Pontes/Viadutos'
 
 NOMEOP
 ------------------------------
 Paulo Castro
 /*3) Para cada operário que trabalha para mais de uma construtora,
 recuperar o seu nome e os nomes das construtoras.*/
+SELECT nomeop, nome_const
+FROM operario INNER JOIN operario_construtora
+ON operario_construtora.cart_trab = operario.cart_trab
+INNER JOIN construtora
+ON operario_construtora.cod_const = construtora.cod_const
+GROUP BY nome_const, nomeop
+HAVING COUNT(construtora.cod_const) > 1
+--resultados vazios
 SELECT nomeop, nome_const FROM operario op, construtora cons, operario_construtora opcons
 WHERE op.cart_trab = opcons.cart_trab
 AND cons.cod_const = opcons.cod_const
-GROUP BY nomeop
-
+GROUP BY nomeop, nome_const
 HAVING COUNT(cons.cod_const) > 1
-GROUP BY nome_const
---mostrar acima de 2
-ORDER BY nomeop DESC --excluir linha
+--arrumar group by requisitando os dois campos do select
 
 NOMEOP NOME_CONST
 ----------------------------- ------------------------------
@@ -174,9 +180,6 @@ AND cons.cod_const = opcons.cod_const
 GROUP BY nomeop
 HAVING COUNT(cons.cod_const) < 2
 
-NOMEOP
-------------------------------
-Luis Padilha
 /*5) Recuperar os nomes dos engenheiros que atuam em alguma construtora além da Encol.*/
 
 
